@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controller/UserController');
+const UserController = require('../controllers/UserController');
 
 // Rota de criação de novos usuários
 router.post("/cadaster", (req, res) => UserController.createUser(req, res));

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ProductController = require('../controller/ProductController');
+const ProductController = require('../controllers/ProductController');
 const upload = require('../middlewares/multerConfig');
 
 // Rota de cadastro de novos produtos
