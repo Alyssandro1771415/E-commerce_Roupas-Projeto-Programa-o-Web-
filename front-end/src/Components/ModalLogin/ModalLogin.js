@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { Button, Modal, Form } from 'react-bootstrap';
 import { AuthContext } from "../AuthContext.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./ModalLogin.css";
 
 import image from "../../images/loginBackImage.jpg";
 
