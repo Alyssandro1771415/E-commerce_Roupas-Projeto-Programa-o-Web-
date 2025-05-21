@@ -1,0 +1,24 @@
+#whatsapp{
+    border-radius: 50%;
+    width: 2.5cm;
+    position: fixed;
+    top: 80vh;
+    right: 3vw;
+    animation: float 5s ease-in-out infinite alternate;
+    z-index: 2;
+}
+
+@keyframes float{
+    0%{
+        transform: translatey(0px);
+        box-shadow: 0 0 1em rgb(62, 214, 169);
+    }
+    50%{
+        transform: translatey(-10px);
+        box-shadow: 0 0 5em rgb(45, 223, 169);
+    }
+    100%{
+        transform: translatey(10px);
+        box-shadow: 0 0 1em rgb(0, 243, 170);
+    }
+}

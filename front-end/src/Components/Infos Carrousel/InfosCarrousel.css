@@ -1,0 +1,80 @@
+    /*carrosel 2*/
+    #infos_carrossel {
+        /*margin: 10px;
+        border-radius: 10px;*/
+        margin-top: 10%;
+        margin-left: 10px;
+        margin-right: 10px;
+        border: solid #83C5BE 2px;
+        background-color: #EDF6F9;
+        border-radius: 0 10px 0 10px;
+    }
+
+    .slide {
+        display: flex;
+
+    }
+
+    .slide img {
+        margin: 2% 1% 2% 1%;
+        height: 55vh;
+        width: 45vw;
+    }
+
+    .carrossel_card_text {
+        margin: 2%;
+        font-size: 175%;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .carrossel_card_text h2 {
+        font-family: "Montserrat", sans-serif;
+        margin-bottom: 30px;
+    }
+
+    .slider-content {
+        --selected-item: 0;
+        --total-items: 3;
+        width: calc(var(--total-items) * 100%);
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        transition: 500ms;
+    }
+
+    .move-slides-buttons {
+        width: 50px;
+        position: absolute;
+        margin-top: 200px;
+        padding: 0%;
+    }
+
+    .move-slides-buttons:hover {
+        width: 60px;
+        cursor: pointer;
+    }
+
+    #move-slide-buttons-moveOn {
+        margin-left: 94%;
+    }
+
+    @media only screen and (max-width: 760px){
+
+
+    #infos_carrossel{
+        height: 22vh;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        margin-top: 0%;
+    }
+
+    .carrossel_card_text{
+        font-size: 90%;
+        margin: 3%;
+    }
+
+    .slide img{
+        height: 40vw;
+    }
+
+}

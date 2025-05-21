@@ -1,0 +1,116 @@
+#register-container {
+    margin-top: 18vh;
+}
+
+h1{
+    text-transform: uppercase;
+    letter-spacing: 5px;    
+    text-shadow: 2px 4px 4px rgba(0, 0, 0, 1);
+    -webkit-text-stroke: 3.5px black;
+    font-family: "Montserrat";
+}
+
+#register-container img {
+    width: 45vw;
+    margin-left: 10vw;
+    margin-top: 12vh;
+}
+
+#text_entry {
+    position: absolute;
+    left: -5000px;
+}
+
+form {
+    max-width: 300px;
+    width: 100%;
+    background-color: rgba(11, 118, 219, 0.5);
+    padding: 20px;
+    float: right;
+    margin: 5%;
+    font-size: large;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 10px;
+    font-family: "Montserrat", sans-serif;
+    margin-top: 2vh;
+}
+
+.validate{
+    background-color: rgba(20, 78, 203, 0.6);
+}
+
+.formInput {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: none;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+#cadastro:hover {
+    box-shadow: 0 0 5em rgb(9, 48, 200);
+    cursor: pointer;
+}
+
+#cadastro:active{
+    background-color: hsl(240, 100%, 50%, 0.5);
+    color: white;
+}
+
+#name {
+    margin-top: 30px;
+}
+
+.sucess-cadaster{
+    text-transform: uppercase;
+    letter-spacing: 1px;    
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
+    font-family: "Montserrat";
+    display: none;
+}
+
+.cadaster-error{
+    text-transform: uppercase;
+    letter-spacing: 1px;    
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
+    font-family: "Montserrat";
+    display: none;
+}
+
+#cadastro {
+    padding: 10px;
+    background: white;
+    border: rgba(245, 245, 245, 0.636);
+    border-radius: 60px;
+    margin-top: 1vh;
+}
+
+@media only screen and (max-width: 760px){
+    
+    #register-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 13vh;
+        align-self: center;
+        height: 40vh;
+        margin-bottom: 30vh;
+    }
+
+    #register-container h1{
+        white-space: nowrap;
+        margin-bottom: 5vw;
+        align-self: self-start;
+    }
+
+    #register-container img{
+        position: absolute;
+        width: 60%;
+        left: 10%;
+        bottom: 6%;
+        z-index: -1;
+    }
+
+}

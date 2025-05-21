@@ -1,0 +1,19 @@
+#Page{
+    background: linear-gradient(45deg, #1672c8, #0be4a3, #09a1c7, #3905d5);
+    background-size: 300% 300%;
+    animation: colors 15s ease infinite;
+}
+
+@keyframes colors {
+    
+    0%{
+        background-position: 0% 100%;
+    }
+    50%{
+        background-position: 100% 50%;
+    }
+    100%{
+        background-position: 0% 100%;
+    }
+
+}

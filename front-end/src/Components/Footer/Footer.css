@@ -1,0 +1,44 @@
+footer {
+    border: solid #83C5BE 2px;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: black;
+    font-family: "Lato", sans-serif;
+}
+
+footer h4 {
+    font-size: 3vh;
+    margin: 1vw;
+    color: white;
+    align-self: baseline;
+}
+
+footer a {
+    color: white;
+}
+
+footer img {
+    height: 15vh;
+    align-self: flex-end;
+}
+
+
+@media only screen and (max-width: 760px){
+
+    footer{
+        height: 10vh;
+    }
+
+    footer img{
+        height: 8vh;
+    }
+
+    footer h4{
+        font-size: 2vw;
+    }    
+
+}
