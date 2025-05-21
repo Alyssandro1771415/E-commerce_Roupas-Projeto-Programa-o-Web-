@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const ModelSchemaInstancy = require('../model/ProductModel');
+const Product = require('../models/ProductModel'); // Modelo Sequelize
 
 class ProductController {
-
     async uploadProductsdata(req, res) {
         try {
             const { productName, productQuantity, productValue } = req.body;
-            
+
             if (!req.file) {
                 return res.status(400).json({ message: "Imagem do produto é obrigatória" });
             }
@@ -17,69 +16,72 @@ class ProductController {
             const newFileName = `${productName.replace(/ /g, "_")}${path.extname(req.file.originalname)}`;
             const newPath = path.join(__dirname, '../public/product_images', newFileName);
 
-            fs.rename(tempPath, newPath, (err) => {
-                if (err) {
-                    console.error("Erro ao renomear a imagem:", err);
-                }
-            });
+            fs.renameSync(tempPath, newPath);
 
-            const existingProduct = await ModelSchemaInstancy.findOne({ productName });
+            // Sequelize: procura produto
+            const existingProduct = await Product.findOne({ where: { productName } });
 
             if (existingProduct) {
-                await ModelSchemaInstancy.updateOne(
-                    { productName },
-                    { $set: { quantity: productQuantity, value: productValue } }
-                );
+                // Sequelize: atualiza produto
+                await existingProduct.update({
+                    quantity: productQuantity,
+                    value: productValue
+                });
+
                 return res.status(200).json({ message: "Produto atualizado com sucesso" });
             } else {
-                const newProduct = new ModelSchemaInstancy({
+                // Sequelize: cria novo produto
+                const newProduct = await Product.create({
                     productName,
                     quantity: productQuantity,
                     value: productValue
                 });
 
-                await newProduct.save();
                 return res.status(201).json({ message: "Produto cadastrado com sucesso", newProduct });
             }
+
         } catch (error) {
-
+            console.error("Erro interno:", error);
             return res.status(500).json({ message: "Erro interno no servidor" });
-
         }
     }
-    
+
     async getProductDatas(req, res) {
         try {
-            const products = await ModelSchemaInstancy.find();
-    
+            const products = await Product.findAll(); // Sequelize
+
             if (products.length > 0) {
+                const productImagesPath = path.join(__dirname, '../public/product_images');
+
                 const productsWithImages = products.map(product => {
                     const productNameFormatted = product.productName.replace(/ /g, "_");
-                    const productImagesPath = path.join(__dirname, '../public/product_images');
-                    
+
                     const files = fs.readdirSync(productImagesPath);
                     const productImage = files.find(file => file.startsWith(productNameFormatted));
-    
-                    const imageUrl = productImage 
-                        ? `${req.protocol}://${req.get('host')}/public/product_images/${productImage}` 
+
+                    const imageUrl = productImage
+                        ? `${req.protocol}://${req.get('host')}/public/product_images/${productImage}`
                         : null;
-    
+
                     return {
-                        ...product._doc,
+                        ...product.dataValues, // Sequelize usa .dataValues para acessar os dados
                         imageUrl
                     };
                 });
-    
-                return res.status(200).json({ message: "Dados de produtos obtidos com êxito!", productsWithImages });
+
+                return res.status(200).json({
+                    message: "Dados de produtos obtidos com êxito!",
+                    productsWithImages
+                });
+            } else {
+                return res.status(404).json({ message: "Nenhum produto encontrado." });
             }
-    
+
         } catch (error) {
             console.error("Erro ao buscar os dados de produtos!", error);
             return res.status(500).json({ message: "Erro ao buscar os dados de produtos!" });
         }
     }
-    
-
 }
 
-module.exports = new ProductController;
+module.exports = new ProductController();

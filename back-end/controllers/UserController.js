@@ -1,15 +1,15 @@
-require('dotenv').config()
+require('dotenv').config();
 const bcrypt = require('bcrypt');
-const UserSchemaInstancy = require('../model/UserModel');
 const jwt = require('jsonwebtoken');
+const User = require('../models/UserModel'); // Sequelize model
 
 class UserController {
 
     async createUser(req, res) {
         try {
             const { name, lastName, email, password } = req.body;
-            
-            const existingUser = await UserSchemaInstancy.findOne({ email });
+
+            const existingUser = await User.findOne({ where: { email } });
             if (existingUser) {
                 return res.status(400).json({ message: "Usuário já cadastrado!" });
             }
@@ -17,45 +17,53 @@ class UserController {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
-            const newUser = new UserSchemaInstancy({ name, lastName, email, password: hashedPassword });
-            await newUser.save();
+            const newUser = await User.create({
+                name,
+                lastName,
+                email,
+                password: hashedPassword
+            });
 
             res.status(201).json({ message: "Usuário cadastrado com sucesso!" });
 
         } catch (error) {
+            console.error("Erro ao criar usuário:", error);
             return res.status(500).json({ message: "Erro interno ao criar usuário." });
         }
     }
 
     async validateLogin(req, res) {
         try {
-
             const { email, password } = req.body;
 
-            const existingUser = await UserSchemaInstancy.findOne({ email });
-            if (!existingUser) {
+            const user = await User.findOne({ where: { email } });
+            if (!user) {
                 return res.status(401).json({ message: "Login ou senha incorretos!" });
             }
 
-            const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+            const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({ message: "Login ou senha incorretos!" });
             }
 
             const token = jwt.sign(
-                {_id: existingUser._id, 
-                name: existingUser.name, 
-                lastName: existingUser.lastName, 
-                email: existingUser.email
-            }, process.env.JSONWEBTOKEN_SECRET);
+                {
+                    id: user.id,
+                    name: user.name,
+                    lastName: user.lastName,
+                    email: user.email
+                },
+                process.env.JSONWEBTOKEN_SECRET,
+                { expiresIn: '1d' }
+            );
+
             res.header("authorization-token", token);
 
-            return res.status(200).json({ message: "Login realizado com sucesso!", user: existingUser });
+            return res.status(200).json({ message: "Login realizado com sucesso!", token });
 
         } catch (error) {
-            
+            console.error("Erro ao validar login:", error);
             return res.status(500).json({ message: "Erro interno ao validar login." });
-        
         }
     }
 
@@ -64,26 +72,28 @@ class UserController {
             const token = req.headers['authorization']?.split(' ')[1];
 
             if (!token) {
-                return res.status(400).json({ message: "Não foi identificado nenhum token na requisição!" });
+                return res.status(400).json({ message: "Token não fornecido!" });
             }
-    
+
             jwt.verify(token, process.env.JSONWEBTOKEN_SECRET, (err, decoded) => {
                 if (err) {
-                    return res.status(401).json({ message: "Token de usuário não válido." });
+                    return res.status(401).json({ message: "Token inválido." });
                 }
-                
-                req.user = decoded;                
+
                 return res.status(200).json({
                     user: {
-                        email: req.user.email,
+                        id: decoded.id,
+                        name: decoded.name,
+                        email: decoded.email
                     }
                 });
             });
-    
+
         } catch (error) {
-            return res.status(401).json({ message: "Erro na validação do token de usuário." });
+            console.error("Erro ao validar token:", error);
+            return res.status(401).json({ message: "Erro na validação do token." });
         }
     }
-}    
+}
 
 module.exports = new UserController();
