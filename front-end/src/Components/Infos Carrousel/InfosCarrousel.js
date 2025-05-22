@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./InfosCarrousel.css";
 import image1  from "../../images/fitness life 1.png"
 import image2  from "../../images/fitness life 2.png"
 import image3  from "../../images/fitness life 3.png"

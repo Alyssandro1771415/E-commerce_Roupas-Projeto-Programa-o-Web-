@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./RegisterContainer.css";
 import vetorImage from "../../images/vetor_imagem-removebg-preview.png";
 
 function RegisterContainer() {

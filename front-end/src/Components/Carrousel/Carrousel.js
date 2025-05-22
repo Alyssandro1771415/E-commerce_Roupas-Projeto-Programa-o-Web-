@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./Carrousel.css";
 import images1 from "../../images/banner1.png";
 import images2 from "../../images/banner2.png";
 import images3 from "../../images/banner3.png";

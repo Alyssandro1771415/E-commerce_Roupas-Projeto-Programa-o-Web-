@@ -1,4 +1,5 @@
 import "./InstagramFeed.css";
+import Instafeed from 'instafeed.js'; 
 
 const InstagramFeed = () =>
   {
