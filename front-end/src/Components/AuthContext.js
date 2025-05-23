@@ -1,11 +1,11 @@
 import { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Importe o hook useNavigate
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate(); // Inicialize o hook useNavigate
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("authorization-token");
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem("authorization-token");
         setUser(null);
-        navigate("/"); // Use navigate para redirecionar após o logout
+        navigate("/");
     };
 
     return (

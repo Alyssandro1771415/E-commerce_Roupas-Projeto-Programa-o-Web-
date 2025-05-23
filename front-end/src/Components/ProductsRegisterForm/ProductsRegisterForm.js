@@ -31,15 +31,12 @@ const ProductsRegisterForm = () => {
             if (!response.ok) {
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
-
-            console.log(response);
     
             setProductName('');
             setProductValue('');
             setProductQuantity('');
             setProductImage(null);
     
-            console.log('Cadastro de produto realizado com sucesso!');
         } catch (error) {
             console.error('Erro ao cadastrar o produto:', error);
         }

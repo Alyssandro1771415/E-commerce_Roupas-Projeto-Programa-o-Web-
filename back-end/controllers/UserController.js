@@ -23,8 +23,6 @@ class UserController {
                 celular
             } = req.body;
 
-            console.log(req.body)
-
             const existingUser = await User.findOne({ where: { email } });
             if (existingUser) {
                 return res.status(400).json({ message: "Usuário já cadastrado!" });
@@ -84,7 +82,7 @@ class UserController {
 
             res.header("authorization-token", token);
 
-            return res.status(200).json({ message: "Login realizado com sucesso!", token });
+            return res.status(200).json({ message: "Login realizado com sucesso!", token, user });
 
         } catch (error) {
             console.error("Erro ao validar login:", error);
