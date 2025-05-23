@@ -1,2 +1,2 @@
 .env
-product_images/*
+/back-end/public/product_images/*.png
