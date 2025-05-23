@@ -1,13 +1,29 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/UserModel'); // Sequelize model
+const User = require('../models/UserModel');
 
 class UserController {
 
     async createUser(req, res) {
         try {
-            const { name, lastName, email, password } = req.body;
+            const {
+                name,
+                lastName,
+                email,
+                password,
+                cpf,
+                rua,
+                numero,
+                complemento,
+                bairro,
+                cidade,
+                estado,
+                cep,
+                celular
+            } = req.body;
+
+            console.log(req.body)
 
             const existingUser = await User.findOne({ where: { email } });
             if (existingUser) {
@@ -21,7 +37,16 @@ class UserController {
                 name,
                 lastName,
                 email,
-                password: hashedPassword
+                password: hashedPassword,
+                cpf,
+                rua,
+                numero,
+                complemento,
+                bairro,
+                cidade,
+                estado,
+                cep,
+                celular
             });
 
             res.status(201).json({ message: "Usuário cadastrado com sucesso!" });

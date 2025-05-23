@@ -23,31 +23,31 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true
   },
-  enderecoRua: {
+  rua: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  enderecoNumero: {
+  numero: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  enderecoComplemento: {
+  complemento: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  enderecoBairro: {
+  bairro: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  enderecoCidade: {
+  cidade: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  enderecoEstado: {
+  estado: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  enderecoCep: {
+  cep: {
     type: DataTypes.STRING,
     allowNull: false
   },

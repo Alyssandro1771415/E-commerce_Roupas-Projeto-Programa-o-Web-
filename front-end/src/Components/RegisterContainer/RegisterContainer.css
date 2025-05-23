@@ -1,19 +1,84 @@
 #register-container {
-    margin-top: 18vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 10vh;
+    padding: 2rem;
+    gap: 2rem;
 }
 
-h1{
+#register-container h1 {
     text-transform: uppercase;
-    letter-spacing: 5px;    
+    letter-spacing: 5px;
     text-shadow: 2px 4px 4px rgba(0, 0, 0, 1);
-    -webkit-text-stroke: 3.5px black;
-    font-family: "Montserrat";
+    -webkit-text-stroke: 2px black;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.5rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 #register-container img {
-    width: 45vw;
-    margin-left: 10vw;
-    margin-top: 12vh;
+    width: 40vw;
+    margin-top: 10%;
+    height: auto;
+    object-fit: contain;
+}
+
+form {
+    width: 100%;
+    max-width: 400px;
+    background-color: rgba(11, 118, 219, 0.5);
+    padding: 2rem;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-family: "Montserrat", sans-serif;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.formContainer h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #000000;
+    font-size: 2rem;
+}
+
+.formInput {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+}
+
+#cadastro {
+    padding: 12px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 1vh;
+}
+
+#cadastro:hover {
+    box-shadow: 0 0 1em rgb(9, 48, 200);
+    cursor: pointer;
+}
+
+#cadastro:active {
+    background-color: hsl(240, 100%, 50%, 0.5);
+    color: white;
 }
 
 #text_entry {
@@ -21,96 +86,50 @@ h1{
     left: -5000px;
 }
 
-form {
-    max-width: 300px;
-    width: 100%;
-    background-color: rgba(11, 118, 219, 0.5);
-    padding: 20px;
-    float: right;
-    margin: 5%;
-    font-size: large;
-    line-height: 30px;
+.sucess-cadaster,
+.cadaster-error {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    -webkit-text-stroke: 0.5px rgb(0, 0, 0);
+    font-family: "Montserrat";
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
     text-align: center;
-    border-radius: 10px;
-    font-family: "Montserrat", sans-serif;
-    margin-top: 2vh;
 }
 
-.validate{
-    background-color: rgba(20, 78, 203, 0.6);
+.sucess-cadaster {
+    background-color: rgba(0, 255, 0, 0.2);
+    color: green;
+    display: block;
 }
 
-.formInput {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    border: none;
-    margin-bottom: 20px;
-    border-radius: 10px;
+.cadaster-error {
+    background-color: rgba(255, 0, 0, 0.2);
+    color: red;
+    display: block;
 }
 
-#cadastro:hover {
-    box-shadow: 0 0 5em rgb(9, 48, 200);
-    cursor: pointer;
-}
-
-#cadastro:active{
-    background-color: hsl(240, 100%, 50%, 0.5);
-    color: white;
-}
-
-#name {
-    margin-top: 30px;
-}
-
-.sucess-cadaster{
-    text-transform: uppercase;
-    letter-spacing: 1px;    
-    -webkit-text-stroke: 1px rgb(0, 0, 0);
-    font-family: "Montserrat";
-    display: none;
-}
-
-.cadaster-error{
-    text-transform: uppercase;
-    letter-spacing: 1px;    
-    -webkit-text-stroke: 1px rgb(0, 0, 0);
-    font-family: "Montserrat";
-    display: none;
-}
-
-#cadastro {
-    padding: 10px;
-    background: white;
-    border: rgba(245, 245, 245, 0.636);
-    border-radius: 60px;
-    margin-top: 1vh;
-}
-
-@media only screen and (max-width: 760px){
-    
-    #register-container{
-        display: flex;
+@media only screen and (max-width: 768px) {
+    #register-container {
         flex-direction: column;
         align-items: center;
-        margin-top: 13vh;
-        align-self: center;
-        height: 40vh;
-        margin-bottom: 30vh;
+        padding: 1rem;
     }
 
-    #register-container h1{
-        white-space: nowrap;
-        margin-bottom: 5vw;
-        align-self: self-start;
+    #register-container img {
+        width: 70%;
+        margin: 0 auto 2rem auto;
     }
 
-    #register-container img{
-        position: absolute;
-        width: 60%;
-        left: 10%;
-        bottom: 6%;
-        z-index: -1;
+    form {
+        width: 90%;
+        max-width: 100%;
     }
 
+    #register-container h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
 }
