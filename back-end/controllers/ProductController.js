@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Product = require('../models/ProductModel'); // Modelo Sequelize
+const Product = require('../models/ProductModel');
 
 class ProductController {
     async uploadProductsdata(req, res) {
@@ -48,7 +48,7 @@ class ProductController {
 
     async getProductDatas(req, res) {
         try {
-            const products = await Product.findAll(); // Sequelize
+            const products = await Product.findAll();
 
             if (products.length > 0) {
                 const productImagesPath = path.join(__dirname, '../public/product_images');
@@ -64,7 +64,7 @@ class ProductController {
                         : null;
 
                     return {
-                        ...product.dataValues, // Sequelize usa .dataValues para acessar os dados
+                        ...product.dataValues,
                         imageUrl
                     };
                 });
