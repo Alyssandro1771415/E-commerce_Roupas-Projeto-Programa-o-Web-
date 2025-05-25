@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./RegisterContainer.css";
 import vetorImage from "../../images/vetor_imagem-removebg-preview.png";
+
+import { AuthContext } from "../AuthContext";
 
 function RegisterContainer() {
   const [formData, setFormData] = useState({
@@ -21,6 +23,12 @@ function RegisterContainer() {
 
   const [successMessage, setSuccessMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+
+  const { user } = useContext(AuthContext);
+
+  if (user) {
+    return null;
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
