@@ -62,12 +62,28 @@ function ShopPage() {
   }, []); 
 
   const addToCart = (productData) => {
-    const updatedProducts = [...products, productData];
-    setProducts(updatedProducts);
+    const existingProductIndex = products.findIndex(
+      (product) => product.product_name === productData.product_name
+    );
 
-    // Convertendo o array para uma string antes de armazená-lo no localStorage
+    let updatedProducts;
+
+    if (existingProductIndex !== -1) {
+      // Produto já existe, somar a quantidade
+      updatedProducts = [...products];
+      updatedProducts[existingProductIndex].quantity += productData.quantity;
+    } else {
+      // Produto não existe, adicionar novo
+      updatedProducts = [...products, productData];
+    }
+
+    setProducts(updatedProducts);
+    console.log(updatedProducts);
+
+    // Armazenar no localStorage
     localStorage.setItem("priscylaStoreCartproducts", JSON.stringify(updatedProducts));
-  }
+  };
+
 
   return (
     <div
