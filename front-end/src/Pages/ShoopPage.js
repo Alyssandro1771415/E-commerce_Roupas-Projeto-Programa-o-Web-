@@ -64,27 +64,36 @@ function ShopPage() {
     fetchData();
   }, []); 
 
-  const addToCart = (productData) => {
-    let updatedProducts = [...products];
+const addToCart = (productData) => {
+  let updatedProducts = [];
 
-    if (updatedProducts.length === 0) {
-      updatedProducts.push(user);
-    }
 
-    const existingProductIndex = updatedProducts.findIndex(
-      (product) => product.product_name === productData.product_name
-    );
+  const prefix = "priscylaStoreCartproducts_";
+  const sufix = user;
+    
+  const storageIdentifier = prefix.concat(sufix);
 
-    if (existingProductIndex !== -1) {
-      updatedProducts[existingProductIndex].quantity += productData.quantity;
-    } else {
-      updatedProducts.push(productData);
-    }
+  setProducts([productData]);
 
-    setProducts(updatedProducts);
-    localStorage.setItem("priscylaStoreCartproducts", JSON.stringify(updatedProducts));
-    console.log(updatedProducts);
-  };
+  const stored = JSON.parse(localStorage.getItem(storageIdentifier)) || [];
+    
+  updatedProducts = [...stored];
+
+  const existingProductIndex = updatedProducts.findIndex(
+    (product, index) => index !== 0 && product.product_name === productData.product_name
+  );
+
+  if (existingProductIndex !== -1) {
+    updatedProducts[existingProductIndex].quantity += productData.quantity;
+  } else {
+    updatedProducts.push(productData);
+  }
+
+  setProducts(updatedProducts.slice(1));
+
+  localStorage.setItem(storageIdentifier, JSON.stringify(updatedProducts));
+};
+
 
 
   return (
