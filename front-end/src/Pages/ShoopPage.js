@@ -11,9 +11,14 @@ function ShopPage() {
   const [loading, setLoading] = useState(true);
   
   const { user } = useContext(AuthContext);
+
+  const prefix = "priscylaStoreCartproducts_";
+  const sufix = user;
+    
+  const storageIdentifier = prefix.concat(sufix);
   
   const [products, setProducts] = useState(() => {
-    const storedProducts = localStorage.getItem("priscylaStoreCartproducts");;
+    const storedProducts = localStorage.getItem(storageIdentifier);
 
     if (storedProducts) {
       return JSON.parse(storedProducts);
@@ -67,15 +72,11 @@ function ShopPage() {
 const addToCart = (productData) => {
   let updatedProducts = [];
 
-
-  const prefix = "priscylaStoreCartproducts_";
-  const sufix = user;
-    
-  const storageIdentifier = prefix.concat(sufix);
-
   setProducts([productData]);
 
   const stored = JSON.parse(localStorage.getItem(storageIdentifier)) || [];
+
+  console.log(stored)
     
   updatedProducts = [...stored];
 
