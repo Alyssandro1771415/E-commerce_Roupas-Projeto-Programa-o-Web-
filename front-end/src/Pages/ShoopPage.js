@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ProductCard from "../Components/ProductCards/ProductCard";
 import "./background.css";
 import Spinner from 'react-bootstrap/Spinner';
 import CartLateralButton from "../Components/CartLateralButton/CartLateralButton";
 
+import { AuthContext } from '../Components/AuthContext.js';
+
 function ShopPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // Inicializando o estado products com o valor do localStorage
+  const { user } = useContext(AuthContext);
+  
   const [products, setProducts] = useState(() => {
-    const storedProducts = localStorage.getItem("priscylaStoreCartproducts");
-    
+    const storedProducts = localStorage.getItem("priscylaStoreCartproducts");;
+
     if (storedProducts) {
       return JSON.parse(storedProducts);
     }
@@ -62,26 +65,25 @@ function ShopPage() {
   }, []); 
 
   const addToCart = (productData) => {
-    const existingProductIndex = products.findIndex(
+    let updatedProducts = [...products];
+
+    if (updatedProducts.length === 0) {
+      updatedProducts.push(user);
+    }
+
+    const existingProductIndex = updatedProducts.findIndex(
       (product) => product.product_name === productData.product_name
     );
 
-    let updatedProducts;
-
     if (existingProductIndex !== -1) {
-      // Produto já existe, somar a quantidade
-      updatedProducts = [...products];
       updatedProducts[existingProductIndex].quantity += productData.quantity;
     } else {
-      // Produto não existe, adicionar novo
-      updatedProducts = [...products, productData];
+      updatedProducts.push(productData);
     }
 
     setProducts(updatedProducts);
-    console.log(updatedProducts);
-
-    // Armazenar no localStorage
     localStorage.setItem("priscylaStoreCartproducts", JSON.stringify(updatedProducts));
+    console.log(updatedProducts);
   };
 
 
