@@ -16,7 +16,7 @@ function Contacts() {
                 </ul>
                 <ul id="iconsText">
                     <li><a id="iconTxt" href="https://www.instagram.com/pricylastore/">@pricylastore</a></li>
-                    <li><a id="iconTxt" href="//wa.me/558396500630">+55(83)99650-0630</a></li>
+                    <li><a id="iconTxt" href="//wa.me/558396500630">+55 (83)99650-0630</a></li>
                     <li><a id="iconTxt" href="mailto:pricylastore@gmail.com">pricylastore@gmail.com</a></li>
                 </ul>
             </div>
