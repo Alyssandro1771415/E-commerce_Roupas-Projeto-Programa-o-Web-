@@ -1,8 +1,7 @@
-import React from "react";
+import { React } from "react";
 import Carrousel from "../Components/Carrousel/Carrousel";
 import RegisterContainer from "../Components/RegisterContainer/RegisterContainer";
 import InfosCarrousel from "../Components/Infos Carrousel/InfosCarrousel";
-import InstagramFeed from "../Components/Instagram Feed/InstagramFeed";
 import Contacts from "../Components/Contacts/Contacts";
 
 function Home() {
@@ -13,7 +12,6 @@ function Home() {
             <Carrousel></Carrousel>
             <RegisterContainer></RegisterContainer>
             <InfosCarrousel></InfosCarrousel>
-            <InstagramFeed></InstagramFeed>
             <Contacts></Contacts>
         </div>
     );
