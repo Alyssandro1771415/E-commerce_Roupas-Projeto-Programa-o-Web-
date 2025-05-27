@@ -29,8 +29,6 @@ function ProductCard({ image, product_name, product_value, addToCart }) {
       <button className="btn btn-add" onClick={() => addToCart({ product_name, product_value, image, quantity })}>
         Adicionar ao Carrinho
       </button>
-
-      <button className="btn btn-remove">Remover</button>
     </div>
   );
 }
