@@ -2,7 +2,7 @@ import React from "react";
 import ProductsRegisterForm from "../Components/ProductsRegisterForm/ProductsRegisterForm";
 import "./background.css";
 
-function Productsregister() {
+function AdministrationPage() {
 
     return (
 
@@ -16,4 +16,4 @@ function Productsregister() {
 
 }
 
-export default Productsregister;
+export default AdministrationPage;
