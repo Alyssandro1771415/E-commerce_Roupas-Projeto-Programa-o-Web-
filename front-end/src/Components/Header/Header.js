@@ -38,7 +38,7 @@ function Header() {
               <li><Link to="/" className="menu-item">HOME</Link></li>
               <li><Link to="/shoop" className="menu-item">COMPRE</Link></li>
               {admin ?
-              <li><Link to="/AdministerPage" className="menu-item">CADASTRO DE PRODUTOS</Link></li>
+              <li><Link to="/AdministerPage" className="menu-item">PÁGINA DO ADMINISTRADOR</Link></li>
               : null}
             </>
             :
