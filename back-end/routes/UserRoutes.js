@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/UserController');
+const isAdmin = require('../middlewares/adminValidation');
 
 // Rota de criação de novos usuários
 router.post("/cadaster", (req, res) => UserController.createUser(req, res));
@@ -13,6 +14,10 @@ router.post("/verify-token", UserController.validateToken, (req, res) => {
             email: req.user.email,
         }
     });
+});
+// Rota para validar login de usuário administrador
+router.post('/admin', isAdmin, (req, res) => {
+  res.json({ isAdmin: true });
 });
 
 module.exports = router;
