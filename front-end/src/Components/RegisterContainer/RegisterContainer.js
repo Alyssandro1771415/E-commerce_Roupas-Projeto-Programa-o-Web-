@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import "./RegisterContainer.css";
 import vetorImage from "../../images/vetor_imagem-removebg-preview.png";
+import { IMaskInput } from "react-imask";
 
 import { AuthContext } from "../AuthContext";
 
@@ -45,7 +46,6 @@ function RegisterContainer() {
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
       }
@@ -86,16 +86,45 @@ function RegisterContainer() {
           <input name="name" placeholder="Nome" value={formData.name} onChange={handleChange} required />
           <input name="lastName" placeholder="Sobrenome" value={formData.lastName} onChange={handleChange} required />
           <input type="email" name="email" placeholder="E-mail" value={formData.email} onChange={handleChange} required />
+          <IMaskInput
+            mask="000.000.000-00"
+            name="cpf"
+            placeholder="CPF"
+            value={formData.cpf}
+            required
+            onAccept={(value) => handleChange({ target: { name: 'cpf', value } })}
+          />
           <input type="password" name="password" placeholder="Senha" value={formData.password} onChange={handleChange} required />
-          <input name="cpf" placeholder="CPF" value={formData.cpf} onChange={handleChange} required />
+          <IMaskInput
+            mask="000.000.000-00"
+            name="cpf"
+            placeholder="CPF"
+            value={formData.cpf}
+            required
+            onAccept={(value) => handleChange({ target: { name: 'cpf', value } })}
+          />
           <input name="rua" placeholder="Rua" value={formData.rua} onChange={handleChange} required />
           <input name="numero" placeholder="Número" value={formData.numero} onChange={handleChange} required />
           <input name="complemento" placeholder="Complemento (opcional)" value={formData.complemento} onChange={handleChange} />
           <input name="bairro" placeholder="Bairro" value={formData.bairro} onChange={handleChange} required />
           <input name="cidade" placeholder="Cidade" value={formData.cidade} onChange={handleChange} required />
           <input name="estado" placeholder="Estado" value={formData.estado} onChange={handleChange} required />
-          <input name="cep" placeholder="CEP" value={formData.cep} onChange={handleChange} required />
-          <input name="celular" placeholder="Celular" value={formData.celular} onChange={handleChange} required />
+          <IMaskInput
+            mask="00000-000"
+            name="cep"
+            placeholder="CEP"
+            value={formData.cep}
+            required
+            onAccept={(value) => handleChange({ target: { name: 'cep', value } })}
+          />
+          <IMaskInput
+            mask="(00) 00000-0000"
+            name="celular"
+            placeholder="Celular"
+            value={formData.celular}
+            required
+            onAccept={(value) => handleChange({ target: { name: 'celular', value } })}
+          />
 
           {successMessage && <h5 className="sucess-cadaster">Cadastro realizado com sucesso!</h5>}
           {errorMessage && <h5 className="cadaster-error">Erro ao realizar cadastro!</h5>}
