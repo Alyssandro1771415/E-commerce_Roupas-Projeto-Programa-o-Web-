@@ -76,6 +76,30 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'João','Silva','joao@email.com','123456','123.456.789-00','Rua A','123',NULL,NULL,'João Pessoa','PB','58000-000','83999999999');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+-- Table structure for table `orders`
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `order_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Table structure for table `order_products`
+
+DROP TABLE IF EXISTS `order_products`;
+CREATE TABLE `order_products` (
+  `order_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `quantity` INT NOT NULL,
+  PRIMARY KEY (`order_id`, `product_id`),
+  CONSTRAINT `fk_order_products_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `fk_order_products_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
