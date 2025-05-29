@@ -5,6 +5,7 @@ const path = require('path');
 const sequelize = require('./db');
 const UserRoutes = require('./routes/UserRoutes');
 const ProductRoutes = require('./routes/ProductRoutes');
+const PaymentRoutes = require('./routes/PaymentRoutes');
 
 const server = express();
 
@@ -32,3 +33,4 @@ sequelize.authenticate()
 server.use('/public', express.static(path.join(__dirname, 'public')));
 server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
+server.use("/api/payment", PaymentRoutes);
