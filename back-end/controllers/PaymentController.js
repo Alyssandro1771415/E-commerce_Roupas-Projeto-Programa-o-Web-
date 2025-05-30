@@ -10,35 +10,32 @@ const preference = new Preference(client);
 
 const createPreference = async (req, res) => {
   try {
+    const { items } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Itens inválidos na requisição.' });
+    }
+
     const response = await preference.create({
       body: {
-        items: [
-          {
-            title: 'Meu produto',
-            quantity: 1,
-            unit_price: 2000,
-          }
-        ]
+        items: items.map(item => ({
+          title: item.title,
+          quantity: item.quantity,
+          unit_price: item.unit_price,
+        }))
       }
-    });
-
-    // Verifica se a resposta contém os campos esperados (Teste de integridade)
-    console.log('Preferência criada:', {
-      id: response.id,
-      init_point: response.init_point,
-      sandbox_init_point: response.sandbox_init_point
     });
 
     res.status(200).json({
       id: response.id,
       init_point: response.init_point,
-      sandbox_init_point: response.sandbox_init_point,
+      sandbox_init_point: response.sandbox_init_point
     });
+
   } catch (error) {
     console.error('Erro ao criar preferência:', error);
     res.status(500).json({ error: 'Erro ao criar preferência de pagamento.' });
   }
 };
-
 
 module.exports = { createPreference };
