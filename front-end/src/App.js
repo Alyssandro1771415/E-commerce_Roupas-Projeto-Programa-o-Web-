@@ -32,6 +32,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/shoop" element={<Shoop />} />
+              <Route path="/Orders" element={<Orders />} />
               <Route 
                 path="/AdministerPage" 
                 element={
@@ -40,7 +41,6 @@ function App() {
                   </ProtectedAdminRoute>
                 } 
               />
-              <Route path="/Orders" element={<Orders />} />
               <Route path="/Payment" element={<Payment />} />
             </Routes>
 
