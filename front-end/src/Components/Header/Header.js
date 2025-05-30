@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 import "./Header.css"; // Certifique-se que este arquivo CSS existe e está correto
 import logo from "../../images/black-logo.png"; // Certifique-se que o caminho da imagem está correto

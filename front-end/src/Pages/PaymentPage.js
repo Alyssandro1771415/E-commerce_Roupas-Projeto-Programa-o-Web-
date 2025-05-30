@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import TotalizingValuePayment from '../Components/TotalizingValuePayment/TotalizingValuePayment';
 
 const PaymentForm = () => {
