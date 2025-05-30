@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from 'react-router-dom';
-import "./Header.css";
-import logo from "../../images/black-logo.png";
+import "./Header.css"; // Certifique-se que este arquivo CSS existe e está correto
+import logo from "../../images/black-logo.png"; // Certifique-se que o caminho da imagem está correto
 import ModalLogin from "../ModalLogin/ModalLogin";
 
 import { AuthContext } from "../AuthContext.js";
@@ -12,10 +12,6 @@ function Header() {
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
-  };
-
-  const buttonStyle = {
-    borderRadius: "10%"
   };
 
   return (
@@ -33,21 +29,23 @@ function Header() {
         </div>
         <ul id="menu">
           {
-            user ?
-            <>
-              <li><Link to="/" className="menu-item">HOME</Link></li>
-              <li><Link to="/shoop" className="menu-item">COMPRE</Link></li>
-              {admin ?
-              <li><Link to="/AdministerPage" className="menu-item">PÁGINA DO ADMINISTRADOR</Link></li>
-              : null}
-            </>
-            :
-            <>
-              <li><Link style={{display: "none"}} to="/shoop" className="menu-item">COMPRE</Link></li>
-              <li><Link style={{display: "none"}} to="/AdministerPage" className="menu-item">CADASTRO DE PRODUTOS</Link></li>
-              <li><Link to="/" className="menu-item">HOME</Link></li>
-              <li><a href="#register-container" className="menu-item">CADASTRE-SE</a></li>
-            </>
+            user ? (
+              <>
+                <li><Link to="/" className="menu-item">HOME</Link></li>
+                <li><Link to="/shoop" className="menu-item">COMPRE</Link></li>
+                <li><Link to="/orders" className="menu-item">PEDIDOS</Link></li> {/* NOVO BOTÃO DE PEDIDOS */}
+                {admin && (
+                  <li><Link to="/AdministerPage" className="menu-item">PÁGINA DO ADMINISTRADOR</Link></li>
+                )}
+              </>
+            ) : (
+              <>
+                <li><Link style={{display: "none"}} to="/shoop" className="menu-item">COMPRE</Link></li>
+                <li><Link style={{display: "none"}} to="/AdministerPage" className="menu-item">CADASTRO DE PRODUTOS</Link></li>
+                <li><Link to="/" className="menu-item">HOME</Link></li>
+                <li><a href="#register-container" className="menu-item">CADASTRE-SE</a></li>
+              </>
+            )
           }
           <li><ModalLogin /></li>
         </ul>
