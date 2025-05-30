@@ -3,17 +3,17 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const sequelize = require('./db');
+const UserRoutes = require('./routes/UserRoutes');
+const ProductRoutes = require('./routes/ProductRoutes');
+const PaymentRoutes = require('./routes/PaymentRoutes');
+const OrderRoutes = require('./routes/OrderRoutes');
 
 const User = require('./models/UserModel');
 const Product = require('./models/ProductModel');   
 const Order = require('./models/OrderModel');       
 const OrderItem = require('./models/OrderItemModel'); 
 
-// Route Imports
-const UserRoutes = require('./routes/UserRoutes');
-const ProductRoutes = require('./routes/ProductRoutes');
-const OrderRoutes = require('./routes/OrderRoutes'); 
-
+const server = express();
 
 // User <-> Order
 User.hasMany(Order, { foreignKey: 'userId', onDelete: 'CASCADE' });
@@ -27,7 +27,7 @@ OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 Product.hasMany(OrderItem, { foreignKey: 'productId', onDelete: 'SET NULL' });
 OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 
-const server = express();
+server.use('/public', express.static(path.join(__dirname, 'public')));
 
 server.use(express.json());
 server.use(cors({
@@ -47,12 +47,11 @@ sequelize.authenticate()
     });
   })
   .catch((err) => {
-    console.error('Erro ao conectar ou sincronizar com o banco de dados:', err);
+    console.error('Erro ao conectar com o banco de dados:', err);
   });
 
 server.use('/public', express.static(path.join(__dirname, 'public')));
-
-
 server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
+server.use("/api/payment", PaymentRoutes);
 server.use('/api/order', OrderRoutes);
