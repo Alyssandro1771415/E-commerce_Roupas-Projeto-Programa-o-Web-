@@ -9,7 +9,6 @@ import ShoopPage from './Pages/ShoopPage';
 import AdministrationPage from './Pages/AdministrationPage';
 import PaymentPage from './Pages/PaymentPage';
 import ProtectedAdminRoute from './Components/ProtectedAdminRoute/ProtectAdminRoute.js';
-import OrdersPage from './Pages/OrdersPage.js';
 
 import { AuthProvider } from './Components/AuthContext.js';
 
@@ -18,7 +17,6 @@ const HomePage = () => <Home></Home>;
 const Shoop = () => <ShoopPage></ShoopPage>;
 const AdministerPage = () => <AdministrationPage></AdministrationPage>;
 const Payment = () => <PaymentPage></PaymentPage>
-const Orders = () => <OrdersPage></OrdersPage>
 
 function App() {
 
@@ -32,7 +30,6 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/shoop" element={<Shoop />} />
-              <Route path="/Orders" element={<Orders />} />
               <Route 
                 path="/AdministerPage" 
                 element={

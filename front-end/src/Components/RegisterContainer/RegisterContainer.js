@@ -95,14 +95,6 @@ function RegisterContainer() {
             onAccept={(value) => handleChange({ target: { name: 'cpf', value } })}
           />
           <input type="password" name="password" placeholder="Senha" value={formData.password} onChange={handleChange} required />
-          <IMaskInput
-            mask="000.000.000-00"
-            name="cpf"
-            placeholder="CPF"
-            value={formData.cpf}
-            required
-            onAccept={(value) => handleChange({ target: { name: 'cpf', value } })}
-          />
           <input name="rua" placeholder="Rua" value={formData.rua} onChange={handleChange} required />
           <input name="numero" placeholder="Número" value={formData.numero} onChange={handleChange} required />
           <input name="complemento" placeholder="Complemento (opcional)" value={formData.complemento} onChange={handleChange} />

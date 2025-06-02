@@ -47,8 +47,9 @@ const ProductsRegisterForm = () => {
         <div className="form-container">
             <h1>Página do Administrador</h1>
             <hr></hr>
-            <h2>Cadastro de Produtos</h2>
             <form onSubmit={handleFormSubmit} encType="multipart/form-data" className='form-products-register'>
+                <h2><strong>Cadastro de Produtos</strong></h2>
+                <hr></hr>
                 <label htmlFor="nome">Nome do Produto:</label>
                 <input
                     type="text"

@@ -6,28 +6,8 @@ const sequelize = require('./db');
 const UserRoutes = require('./routes/UserRoutes');
 const ProductRoutes = require('./routes/ProductRoutes');
 const PaymentRoutes = require('./routes/PaymentRoutes');
-const OrderRoutes = require('./routes/OrderRoutes');
-
-const User = require('./models/UserModel');
-const Product = require('./models/ProductModel');   
-const Order = require('./models/OrderModel');       
-const OrderItem = require('./models/OrderItemModel'); 
 
 const server = express();
-
-// User <-> Order
-User.hasMany(Order, { foreignKey: 'userId', onDelete: 'CASCADE' });
-Order.belongsTo(User, { foreignKey: 'userId' });
-
-// Order <-> OrderItem
-Order.hasMany(OrderItem, { foreignKey: 'orderId', onDelete: 'CASCADE', as: 'items' });
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
-
-// Product <-> OrderItem
-Product.hasMany(OrderItem, { foreignKey: 'productId', onDelete: 'SET NULL' });
-OrderItem.belongsTo(Product, { foreignKey: 'productId' });
-
-server.use('/public', express.static(path.join(__dirname, 'public')));
 
 server.use(express.json());
 server.use(cors({
@@ -54,4 +34,3 @@ server.use('/public', express.static(path.join(__dirname, 'public')));
 server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
 server.use("/api/payment", PaymentRoutes);
-server.use('/api/order', OrderRoutes);
