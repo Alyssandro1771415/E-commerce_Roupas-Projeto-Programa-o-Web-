@@ -3,99 +3,80 @@ import ProductCard from "../Components/ProductCards/ProductCard";
 import "./background.css";
 import Spinner from 'react-bootstrap/Spinner';
 import CartLateralButton from "../Components/CartLateralButton/CartLateralButton";
-
 import { AuthContext } from '../Components/AuthContext.js';
 
 function ShopPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  
   const { user } = useContext(AuthContext);
 
   const prefix = "priscylaStoreCartproducts_";
   const sufix = user;
-    
   const storageIdentifier = prefix.concat(sufix);
   
   const [products, setProducts] = useState(() => {
     const storedProducts = localStorage.getItem(storageIdentifier);
-
-    if (storedProducts) {
-      return JSON.parse(storedProducts);
-    }
-
-    return [];
+    return storedProducts ? JSON.parse(storedProducts) : [];
   });
 
   useEffect(() => {
-
-    const productsData = [];
-
     const fetchData = async () => {
       try {
-
         const response = await fetch("http://localhost:5000/api/product/getProductDatas", {
           method: "GET"
         });
 
-        if(!response.ok){
+        if(!response.ok) {
           console.log("Erro na consulta via front!");
+          return;
         }
 
         const data = await response.json();
-
-        for (const datas of data.productsWithImages) {
-
-          try {
-            productsData.push({
-              product_name: datas.productName,
-              product_value: datas.value,
-              image: datas.imageUrl
-
-            })
-          } catch (error) {
-            console.log("Erro ao carregar os dados!");
-          }
-
-        }
+        const productsData = data.productsWithImages.map(datas => ({
+          product_name: datas.productName,
+          product_value: datas.value,
+          image: datas.imageUrl
+        }));
 
         setData(productsData);
         setLoading(false);
       } catch (error) {
         console.error("Erro ao obter dados do Firestore:", error);
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []); 
 
-const addToCart = (productData) => {
-  let updatedProducts = [];
+  useEffect(() => {
+    localStorage.setItem(storageIdentifier, JSON.stringify(products));
+  }, [products, storageIdentifier]);
 
-  setProducts([productData]);
+  const addToCart = (productData) => {
+    setProducts(prevProducts => {
+      const existingProductIndex = prevProducts.findIndex(
+        product => product.product_name === productData.product_name
+      );
 
-  const stored = JSON.parse(localStorage.getItem(storageIdentifier)) || [];
+      let updatedProducts;
+      
+      if (existingProductIndex !== -1) {
+        updatedProducts = [...prevProducts];
+        updatedProducts[existingProductIndex] = {
+          ...updatedProducts[existingProductIndex],
+          quantity: (updatedProducts[existingProductIndex].quantity || 1) + (productData.quantity || 1)
+        };
+      } else {
+        updatedProducts = [...prevProducts, {
+          ...productData,
+          quantity: productData.quantity || 1
+        }];
+      }
 
-  console.log(stored)
-    
-  updatedProducts = [...stored];
-
-  const existingProductIndex = updatedProducts.findIndex(
-    (product, index) => index !== 0 && product.product_name === productData.product_name
-  );
-
-  if (existingProductIndex !== -1) {
-    updatedProducts[existingProductIndex].quantity += productData.quantity;
-  } else {
-    updatedProducts.push(productData);
-  }
-
-  setProducts(updatedProducts.slice(1));
-
-  localStorage.setItem(storageIdentifier, JSON.stringify(updatedProducts));
-};
-
-
+      return updatedProducts;
+    });
+  };
 
   return (
     <div
@@ -108,7 +89,7 @@ const addToCart = (productData) => {
       }}
       id="Page"
     >
-      <CartLateralButton data={products}></CartLateralButton>
+      <CartLateralButton data={products} />
   
       {loading ? (
         <div style={{ margin: "50vh" }}>
@@ -131,7 +112,6 @@ const addToCart = (productData) => {
       )}
     </div>
   );
-  
 }
 
 export default ShopPage;
