@@ -52,40 +52,57 @@ function TotalizingValuePayment({ data }) {
     border: "none",
     borderRadius: "6px",
     fontSize: "1rem",
-    cursor: "pointer"
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+    ':hover': {
+      backgroundColor: "#0056b3"
+    }
   };
 
   const handlePayment = async () => {
+    // Obter o token do localStorage
+    const token = localStorage.getItem('authorization-token');
+    
+    if (!token) {
+      alert('Você precisa estar logado para realizar o pagamento');
+      return;
+    }
+
     const items = data.map(product => ({
+      id: product.id, // Adicionei o ID do produto que será necessário no backend
       title: product.product_name,
       quantity: product.quantity,
       unit_price: Number(product.product_value)
     }));
 
-    const body = { items };
-
-    console.log("Corpo da requisição:", JSON.stringify(body, null, 2));
-
     try {
       const response = await fetch("http://localhost:5000/api/payment/create_preference", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "authorization-token": token // Incluindo o token no header
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ items })
       });
 
-      const result = await response.json();
-      console.log("Resposta da API:", result);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao processar pagamento');
+      }
 
+      const result = await response.json();
+      
       if (result.init_point) {
         window.location.href = result.init_point;
+      } else if (result.sandbox_init_point) {
+        // Para ambiente de desenvolvimento/sandbox
+        window.location.href = result.sandbox_init_point;
       } else {
-        alert("Pagamento criado com sucesso (mas sem link)");
+        alert("Erro: Link de pagamento não recebido");
       }
     } catch (error) {
       console.error("Erro ao criar pagamento:", error);
-      alert("Erro ao processar o pagamento.");
+      alert(error.message || "Erro ao processar o pagamento.");
     }
   };
 
@@ -119,7 +136,11 @@ function TotalizingValuePayment({ data }) {
         Total: R${total.toFixed(2)}
       </div>
       <div style={{ textAlign: "center" }}>
-        <button style={buttonStyle} onClick={handlePayment}>
+        <button 
+          style={buttonStyle} 
+          onClick={handlePayment}
+          disabled={data.length === 0} // Desabilita se não houver produtos
+        >
           Pagar
         </button>
       </div>
