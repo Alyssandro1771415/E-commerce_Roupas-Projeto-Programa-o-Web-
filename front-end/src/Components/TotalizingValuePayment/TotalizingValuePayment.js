@@ -60,7 +60,6 @@ function TotalizingValuePayment({ data }) {
   };
 
   const handlePayment = async () => {
-    // Obter o token do localStorage
     const token = localStorage.getItem('authorization-token');
     
     if (!token) {
@@ -69,7 +68,7 @@ function TotalizingValuePayment({ data }) {
     }
 
     const items = data.map(product => ({
-      id: product.id, // Adicionei o ID do produto que será necessário no backend
+      id: product.id,
       title: product.product_name,
       quantity: product.quantity,
       unit_price: Number(product.product_value)
@@ -80,7 +79,7 @@ function TotalizingValuePayment({ data }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "authorization-token": token // Incluindo o token no header
+          "authorization-token": token
         },
         body: JSON.stringify({ items })
       });
@@ -91,12 +90,16 @@ function TotalizingValuePayment({ data }) {
       }
 
       const result = await response.json();
+
+      if (result.email) {
+        localStorage.removeItem(`priscylaStoreCartproducts_${result.email}`);
+
+        console.log("Carrinho de compras limpo para o usuário:", result.email);
+      }
       
-      if (result.init_point) {
-        window.location.href = result.init_point;
-      } else if (result.sandbox_init_point) {
-        // Para ambiente de desenvolvimento/sandbox
-        window.location.href = result.sandbox_init_point;
+      const paymentUrl = result.init_point || result.sandbox_init_point;
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
       } else {
         alert("Erro: Link de pagamento não recebido");
       }
@@ -139,7 +142,7 @@ function TotalizingValuePayment({ data }) {
         <button 
           style={buttonStyle} 
           onClick={handlePayment}
-          disabled={data.length === 0} // Desabilita se não houver produtos
+          disabled={data.length === 0}
         >
           Pagar
         </button>

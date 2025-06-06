@@ -19,7 +19,6 @@ const createPreference = async (req, res) => {
       return res.status(401).json({ error: 'Token não fornecido' });
     }
 
-    // Decodificar o JWT
     const decoded = jwt.verify(token, process.env.JSONWEBTOKEN_SECRET);
     const userId = decoded.id;
 
@@ -27,7 +26,6 @@ const createPreference = async (req, res) => {
       return res.status(400).json({ error: 'Lista de itens inválida ou vazia' });
     }
 
-    // Buscar produtos no banco de dados
     const products = await Product.findAll({
       where: {
         productName: items.map(item => item.title)
@@ -43,27 +41,22 @@ const createPreference = async (req, res) => {
       });
     }
 
-    // Vincular produtos com seus IDs e valores
     const verifiedItems = items.map(item => {
       const product = products.find(p => p.productName === item.title);
       return {
         ...item,
         id: product.id,
-        unit_price: parseFloat(product.value) // Convertendo para float
+        unit_price: parseFloat(product.value)
       };
     });
 
-    // Calcular total (para o Mercado Pago, não armazenamos no banco)
     const total = verifiedItems.reduce((sum, item) => sum + (item.unit_price * item.quantity), 0);
 
-    // Criar pedido (sem total, conforme estrutura da tabela)
     const order = await Order.create({
       user_id: userId,
       status: 'pendente'
-      // order_date é preenchido automaticamente
     });
 
-    // Criar itens do pedido
     await OrderItem.bulkCreate(
       verifiedItems.map(item => ({
         order_id: order.id,
@@ -72,7 +65,6 @@ const createPreference = async (req, res) => {
       }))
     );
 
-    // Criar preferência no Mercado Pago
     const response = await preference.create({
       body: {
         items: verifiedItems.map(item => ({
@@ -96,7 +88,8 @@ const createPreference = async (req, res) => {
       init_point: response.init_point,
       sandbox_init_point: response.sandbox_init_point,
       orderId: order.id,
-      total
+      total,
+      email: decoded.email
     });
 
   } catch (error) {
