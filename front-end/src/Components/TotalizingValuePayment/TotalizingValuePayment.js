@@ -1,6 +1,10 @@
 import React from 'react';
+import { IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-function TotalizingValuePayment({ data }) {
+function TotalizingValuePayment({ data, onQuantityChange, onRemoveItem }) {
   const total = data.reduce((acc, product) => {
     const value = Number(product.product_value);
     return acc + value * product.quantity;
@@ -110,45 +114,70 @@ function TotalizingValuePayment({ data }) {
   };
 
   return (
-    <div style={containerStyle}>
-      <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Resumo do Pedido</h2>
-      <table style={tableStyle}>
-        <thead>
-          <tr>
-            <th style={headerStyle}>Produto</th>
-            <th style={headerStyle}>Valor Unitário</th>
-            <th style={headerStyle}>Quantidade</th>
-            <th style={headerStyle}>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((product, index) => {
-            const value = Number(product.product_value);
-            return (
-              <tr key={index}>
-                <td style={thTdStyle}>{product.product_name}</td>
-                <td style={thTdStyle}>R${value.toFixed(2)}</td>
-                <td style={thTdStyle}>{product.quantity}</td>
-                <td style={thTdStyle}>R${(value * product.quantity).toFixed(2)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div style={totalStyle}>
-        Total: R${total.toFixed(2)}
+      <div style={containerStyle}>
+        <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Resumo do Pedido</h2>
+        <table style={tableStyle}>
+          <thead>
+            <tr>
+              <th style={headerStyle}>Produto</th>
+              <th style={headerStyle}>Valor Unitário</th>
+              <th style={headerStyle}>Quantidade</th>
+              <th style={headerStyle}>Subtotal</th>
+              <th style={headerStyle}>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((product, index) => {
+              const value = Number(product.product_value);
+              return (
+                <tr key={index}>
+                  <td style={thTdStyle}>{product.product_name}</td>
+                  <td style={thTdStyle}>R${value.toFixed(2)}</td>
+                  <td style={thTdStyle}>
+                    <IconButton 
+                      size="small" 
+                      onClick={() => onQuantityChange && onQuantityChange(product.product_name, product.quantity - 1)}
+                      disabled={product.quantity <= 1}
+                    >
+                      <RemoveIcon fontSize="small" />
+                    </IconButton>
+                    {product.quantity}
+                    <IconButton 
+                      size="small" 
+                      onClick={() => onQuantityChange && onQuantityChange(product.product_name, product.quantity + 1)}
+                    >
+                      <AddIcon fontSize="small" />
+                    </IconButton>
+                  </td>
+                  <td style={thTdStyle}>R${(value * product.quantity).toFixed(2)}</td>
+                  <td style={thTdStyle}>
+                    <IconButton 
+                      size="small" 
+                      onClick={() => onRemoveItem && onRemoveItem(product.product_name)}
+                      color="error"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <div style={totalStyle}>
+          Total: R${total.toFixed(2)}
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <button 
+            style={buttonStyle} 
+            onClick={handlePayment}
+            disabled={data.length === 0}
+          >
+            Pagar
+          </button>
+        </div>
       </div>
-      <div style={{ textAlign: "center" }}>
-        <button 
-          style={buttonStyle} 
-          onClick={handlePayment}
-          disabled={data.length === 0}
-        >
-          Pagar
-        </button>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default TotalizingValuePayment;
