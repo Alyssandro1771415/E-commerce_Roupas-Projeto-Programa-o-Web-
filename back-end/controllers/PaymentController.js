@@ -19,6 +19,7 @@ const createPreference = async (req, res) => {
     const response = await preference.create({
       body: {
         items: items.map(item => ({
+          id: item.id,
           title: item.title,
           quantity: item.quantity,
           unit_price: item.unit_price,

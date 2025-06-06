@@ -6,10 +6,17 @@ const sequelize = require('./db');
 const UserRoutes = require('./routes/UserRoutes');
 const ProductRoutes = require('./routes/ProductRoutes');
 const PaymentRoutes = require('./routes/PaymentRoutes');
+const PaymentStatusRoutes = require('./routes/PaymentStatusRoutes');
+const WebhookController = require('./routes/StatusRoutes');
 
 const server = express();
 
+// Middleware express.raw para capturar o corpo cru apenas na rota do webhook
+server.use('/api/webhook', express.raw({ type: 'application/json' }));
+
+// Middleware para JSON padrão nas outras rotas
 server.use(express.json());
+
 server.use(cors({
     origin: 'http://localhost:3000',
     exposedHeaders: ['authorization-token'],
@@ -34,3 +41,7 @@ server.use('/public', express.static(path.join(__dirname, 'public')));
 server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
 server.use("/api/payment", PaymentRoutes);
+server.use('/api/paymentStatus', PaymentStatusRoutes);
+
+// Essa rota deve vir depois do express.raw para funcionar corretamente
+server.use('/api/webhook', WebhookController);

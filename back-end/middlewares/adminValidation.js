@@ -1,6 +1,8 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
+const User = require('../models/UserModel');
+
 function isAdmin(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -19,9 +21,6 @@ function isAdmin(req, res, next) {
     return res.status(403).json({ message: "Token inválido" });
   }
 }
-
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
 const adminAuth = async (req, res, next) => {
   try {
