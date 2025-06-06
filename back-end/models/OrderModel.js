@@ -1,52 +1,61 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database'); // ajuste o caminho conforme seu projeto
 
-const orderSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  items: [{
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1
-    },
-    price: {
-      type: Number,
-      required: true,
+const Order = sequelize.define('Order', {
+  total: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
       min: 0
     }
-  }],
-  total: {
-    type: Number,
-    required: true,
-    min: 0
   },
   status: {
-    type: String,
-    enum: ['pendente', 'processando', 'enviado', 'entregue', 'cancelado'],
-    default: 'pendente'
+    type: DataTypes.ENUM('pendente', 'processando', 'enviado', 'entregue', 'cancelado'),
+    defaultValue: 'pendente'
   },
   shippingAddress: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   paymentMethod: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+const OrderItem = sequelize.define('OrderItem', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    validate: {
+      min: 1
+    }
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    validate: {
+      min: 0
+    }
+  }
+}, {
+  timestamps: false
+});
+
+// Associações
+const User = require('./User');     // certifique-se de definir esse modelo
+const Product = require('./Product'); // idem
+
+Order.belongsTo(User, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+Order.hasMany(OrderItem, { as: 'items', foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+
+OrderItem.belongsTo(Order, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+OrderItem.belongsTo(Product, { foreignKey: 'productId', allowNull: false });
+
+module.exports = { Order, OrderItem };
