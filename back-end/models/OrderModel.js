@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // ajuste o caminho conforme seu projeto
+const sequelize = require('../db');
 
 const Order = sequelize.define('Order', {
   total: {
@@ -48,9 +48,8 @@ const OrderItem = sequelize.define('OrderItem', {
   timestamps: false
 });
 
-// Associações
-const User = require('./User');     // certifique-se de definir esse modelo
-const Product = require('./Product'); // idem
+const User = require('./User');
+const Product = require('./Product');
 
 Order.belongsTo(User, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 Order.hasMany(OrderItem, { as: 'items', foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
