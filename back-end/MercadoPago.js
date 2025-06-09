@@ -21,17 +21,4 @@ const getPaymentStatus = async (paymentId) => {
   }
 };
 
-// Função para validar assinatura do webhook
-const verifyWebhookSignature = (req) => {
-  const signature = req.headers['x-signature'];
-  if (!signature) return false;
-  
-  const hash = crypto
-    .createHmac('sha256', process.env.MERCADO_PAGO_WEBHOOK_SECRET)
-    .update(req.rawBody)
-    .digest('hex');
-    
-  return signature === `sha256=${hash}`;
-};
-
-export { preference, payment, getPaymentStatus, verifyWebhookSignature };
+export { preference, payment, getPaymentStatus };
