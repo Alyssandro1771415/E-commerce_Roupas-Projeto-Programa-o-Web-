@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem("authorization-token", token);
 
             setUser(data.user.email);
+            localStorage.setItem("userEmail", data.user.email);
             await isAdmin();
 
             return true;
@@ -84,6 +85,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("authorization-token");
+        localStorage.removeItem("userEmail");
         setUser(null);
         setAdmin(false);
         navigate("/");
