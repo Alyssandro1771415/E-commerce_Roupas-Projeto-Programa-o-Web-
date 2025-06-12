@@ -20,3 +20,13 @@ html, body {
     overscroll-behavior: none;
     scroll-behavior: smooth;
 }
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}

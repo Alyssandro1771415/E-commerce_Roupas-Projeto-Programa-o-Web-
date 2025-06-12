@@ -7,6 +7,7 @@ const UserRoutes = require('./routes/UserRoutes');
 const ProductRoutes = require('./routes/ProductRoutes');
 const PaymentRoutes = require('./routes/PaymentRoutes');
 const WebhookController = require('./routes/StatusRoutes');
+const OrderRoutes = require('./routes/OrderRoutes');
 
 const server = express();
 
@@ -38,5 +39,6 @@ server.use('/public', express.static(path.join(__dirname, 'public')));
 server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
 server.use("/api/payment", PaymentRoutes);
+server.use('/api/admin/orders', OrderRoutes); 
 
 server.use('/api/webhook', WebhookController);

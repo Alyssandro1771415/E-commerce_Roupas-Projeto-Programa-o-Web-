@@ -1,7 +1,9 @@
+// Header.js
+
 import { useState, useContext } from "react";
 import { Link } from 'react-router-dom';
-import "./Header.css"; // Certifique-se que este arquivo CSS existe e está correto
-import logo from "../../images/black-logo.png"; // Certifique-se que o caminho da imagem está correto
+import "./Header.css";
+import logo from "../../images/black-logo.png";
 import ModalLogin from "../ModalLogin/ModalLogin";
 
 import { AuthContext } from "../AuthContext.js";
@@ -33,9 +35,16 @@ function Header() {
               <>
                 <li><Link to="/" className="menu-item">HOME</Link></li>
                 <li><Link to="/shoop" className="menu-item">COMPRE</Link></li>
-                <li><Link to="/orders" className="menu-item">PEDIDOS</Link></li> {/* NOVO BOTÃO DE PEDIDOS */}
+                {/* O link de pedidos para usuário comum foi removido por enquanto */}
+                {/* <li><Link to="/orders" className="menu-item">PEDIDOS</Link></li> */}
+                
+                {/* ↓↓↓ CORREÇÃO AQUI ↓↓↓  */}
+                {/* Agrupamos os links de administração juntos */}
                 {admin && (
-                  <li><Link to="/AdministerPage" className="menu-item">PÁGINA DO ADMINISTRADOR</Link></li>
+                  <>
+                    <li><Link to="/AdministerPage" className="menu-item">CADASTRAR PRODUTOS</Link></li>
+                    <li><Link to="/admin/orders" className="menu-item">GERENCIAR PEDIDOS</Link></li>
+                  </>
                 )}
               </>
             ) : (
