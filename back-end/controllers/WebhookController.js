@@ -8,21 +8,15 @@ const handleWebhook = async (req, res) => {
 
     const { type, data } = req.body;
 
-    console.log('📩 Corpo recebido no webhook:', JSON.stringify(req.body, null, 2));
-
-    console.log(`🔔 Recebido webhook do tipo: ${type}, ${data}`);
-
     if (type !== 'payment') {
       return res.status(200).send('Evento não relacionado a pagamento');
     }
 
     const paymentDetails = await payment.get({ id: data.id });
-    const orderId = paymentDetails.external_reference;
+    const order_id = paymentDetails.external_reference;
 
-    console.log(`🔔 Recebido webhook de pagamento: ${paymentDetails} para o pedido ID ${orderId}`);
-
-    if (!orderId) {
-      console.warn('⚠️ External reference (orderId) não encontrado');
+    if (!order_id) {
+      console.warn('⚠️ External reference (order_id) não encontrado');
       return res.status(400).send('Order ID não encontrado');
     }
 
@@ -43,9 +37,8 @@ const handleWebhook = async (req, res) => {
         orderStatus = 'pendente';
     }
 
-    const order = await Order.findByPk(orderId);
+    const order = await Order.findByPk(order_id);
     if (!order) {
-      console.warn(`⚠️ Pedido não encontrado (ID: ${orderId})`);
       return res.status(404).send('Pedido não encontrado');
     }
 
@@ -53,22 +46,22 @@ const handleWebhook = async (req, res) => {
 
     if (orderStatus === 'processando') {
       const horaPagamento = new Date().toLocaleString('pt-BR');
-      console.log(`🟢 [${horaPagamento}] Pagamento confirmado para o pedido ID ${orderId}`);
 
-      const items = await OrderItem.findAll({ where: { orderId } });
+      const items = await OrderItem.findAll({ where: { order_id } });
 
       for (const item of items) {
-        const product = await Product.findByPk(item.productId);
+
+        const product = await Product.findByPk(item.dataValues.product_id);
+
+        console.log(product);
+
         if (product) {
           product.quantity = Math.max(0, product.quantity - item.quantity);
           await product.save();
-          console.log(`✅ Estoque atualizado: ${product.productName} -${item.quantity}`);
         }
       }
     }
 
-
-    console.log(`📦 Pedido ${orderId} atualizado para status: ${orderStatus}`);
     res.sendStatus(200);
 
   } catch (error) {

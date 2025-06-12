@@ -37,7 +37,7 @@ const OrderItem = sequelize.define('OrderItem', {
   }
 }, {
   timestamps: false,
-  tableName: 'order_products' // Nome exato da tabela
+  tableName: 'order_products'
 });
 
 module.exports = { Order, OrderItem };
