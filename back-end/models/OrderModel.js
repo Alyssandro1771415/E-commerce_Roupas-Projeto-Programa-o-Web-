@@ -14,7 +14,12 @@ const Order = sequelize.define('Order', {
   order_date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
-  }
+  },
+  order_status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'PENDING'
+  },
 }, {
   timestamps: false,
   tableName: 'orders'

@@ -54,7 +54,7 @@ const createPreference = async (req, res) => {
 
     const order = await Order.create({
       user_id: userId,
-      status: 'pendente'
+      order_status: 'PENDING',
     });
 
     await OrderItem.bulkCreate(

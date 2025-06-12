@@ -1,4 +1,3 @@
-const { compareSync } = require('bcrypt');
 const { payment } = require('../MercadoPago');
 const { Order, OrderItem } = require('../models/OrderModel');
 const Product = require('../models/ProductModel');
@@ -22,19 +21,19 @@ const handleWebhook = async (req, res) => {
 
     switch (paymentDetails.status) {
       case 'approved':
-        orderStatus = 'processando';
+        orderStatus = 'PAID';
         break;
       case 'pending':
-        orderStatus = 'pendente';
+        orderStatus = 'PENDING';
         break;
       case 'rejected':
-        orderStatus = 'cancelado';
+        orderStatus = 'CANCELED';
         break;
       case 'refunded':
-        orderStatus = 'reembolsado';
+        orderStatus = 'CANCELED';
         break;
       default:
-        orderStatus = 'pendente';
+        orderStatus = 'PENDING';
     }
 
     const order = await Order.findByPk(order_id);
@@ -42,18 +41,15 @@ const handleWebhook = async (req, res) => {
       return res.status(404).send('Pedido não encontrado');
     }
 
-    await order.update({ status: orderStatus });
+    await order.update({ order_status: orderStatus });
 
-    if (orderStatus === 'processando') {
-      const horaPagamento = new Date().toLocaleString('pt-BR');
+    if (orderStatus === 'PAID') {
 
       const items = await OrderItem.findAll({ where: { order_id } });
 
       for (const item of items) {
 
         const product = await Product.findByPk(item.dataValues.product_id);
-
-        console.log(product);
 
         if (product) {
           product.quantity = Math.max(0, product.quantity - item.quantity);
