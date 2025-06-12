@@ -84,6 +84,7 @@ CREATE TABLE `orders` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `order_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `order_status` ENUM('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELED') DEFAULT 'PENDING',
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
