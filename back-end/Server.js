@@ -10,10 +10,8 @@ const WebhookController = require('./routes/StatusRoutes');
 
 const server = express();
 
-// Middleware express.raw para capturar o corpo cru apenas na rota do webhook
-server.use('/api/webhook', express.raw({ type: 'application/json' }));
+server.use('/api/webhook', express.json());
 
-// Middleware para JSON padrão nas outras rotas
 server.use(express.json());
 
 server.use(cors({
@@ -41,5 +39,4 @@ server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
 server.use("/api/payment", PaymentRoutes);
 
-// Essa rota deve vir depois do express.raw para funcionar corretamente
 server.use('/api/webhook', WebhookController);

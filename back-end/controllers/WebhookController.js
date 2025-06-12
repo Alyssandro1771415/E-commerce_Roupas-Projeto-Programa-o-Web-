@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const { compareSync } = require('bcrypt');
 const { payment } = require('../MercadoPago');
 const { Order, OrderItem } = require('../models/OrderModel');
 const Product = require('../models/ProductModel');
@@ -8,6 +8,10 @@ const handleWebhook = async (req, res) => {
 
     const { type, data } = req.body;
 
+    console.log('📩 Corpo recebido no webhook:', JSON.stringify(req.body, null, 2));
+
+    console.log(`🔔 Recebido webhook do tipo: ${type}, ${data}`);
+
     if (type !== 'payment') {
       return res.status(200).send('Evento não relacionado a pagamento');
     }
@@ -15,12 +19,13 @@ const handleWebhook = async (req, res) => {
     const paymentDetails = await payment.get({ id: data.id });
     const orderId = paymentDetails.external_reference;
 
+    console.log(`🔔 Recebido webhook de pagamento: ${paymentDetails} para o pedido ID ${orderId}`);
+
     if (!orderId) {
       console.warn('⚠️ External reference (orderId) não encontrado');
       return res.status(400).send('Order ID não encontrado');
     }
 
-    let orderStatus;
     switch (paymentDetails.status) {
       case 'approved':
         orderStatus = 'processando';
@@ -46,9 +51,12 @@ const handleWebhook = async (req, res) => {
 
     await order.update({ status: orderStatus });
 
-    if (paymentDetails.status === 'approved' && orderStatus !== 'processando') {
+    if (orderStatus === 'processando') {
+      const horaPagamento = new Date().toLocaleString('pt-BR');
+      console.log(`🟢 [${horaPagamento}] Pagamento confirmado para o pedido ID ${orderId}`);
+
       const items = await OrderItem.findAll({ where: { orderId } });
-      
+
       for (const item of items) {
         const product = await Product.findByPk(item.productId);
         if (product) {
@@ -58,6 +66,7 @@ const handleWebhook = async (req, res) => {
         }
       }
     }
+
 
     console.log(`📦 Pedido ${orderId} atualizado para status: ${orderStatus}`);
     res.sendStatus(200);
