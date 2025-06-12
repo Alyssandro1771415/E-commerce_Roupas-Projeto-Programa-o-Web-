@@ -97,13 +97,11 @@ function TotalizingValuePayment({ data, onQuantityChange, onRemoveItem }) {
 
       if (result.email) {
         localStorage.removeItem(`priscylaStoreCartproducts_${result.email}`);
-
-        console.log("Carrinho de compras limpo para o usuário:", result.email);
       }
       
       const paymentUrl = result.init_point || result.sandbox_init_point;
       if (paymentUrl) {
-        window.location.href = paymentUrl;
+        window.open(paymentUrl, "_blank");
       } else {
         alert("Erro: Link de pagamento não recebido");
       }
