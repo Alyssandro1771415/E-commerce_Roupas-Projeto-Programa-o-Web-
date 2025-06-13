@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Badge, Spinner, Form, Button, Alert } from 'react-bootstrap';
+import { Card, Badge, Spinner, Form, Alert } from 'react-bootstrap';
 import './background.css';
 
 function AdminOrdersPage() {
@@ -27,6 +27,9 @@ function AdminOrdersPage() {
         }
 
         const data = await response.json();
+        if (data.orders && data.orders.length > 0) {
+          console.log("INSPECIONANDO O PRIMEIRO PEDIDO RECEBIDO:", data.orders[0]);
+      }
         setOrders(data.orders);
       } catch (err) {
         setError(err.message);
@@ -164,12 +167,24 @@ return (
 
                 <hr />
 
-                {/* Esta parte precisa ser ajustada se você for mostrar os itens aqui */}
-                <h6 className="mb-3">Itens:</h6>
-                <ul className="list-unstyled">
-                    {/* Exemplo: {order.items?.map((item, index) => (...))} */}
-                </ul>
+                <h6 className="mb-3">Itens do Pedido:</h6>
 
+                <ul className="list-unstyled">
+                  {order.items && order.items.length > 0 ? (
+                    order.items.map(item => (
+                      <li key={item.id} className="d-flex justify-content-between align-items-center mb-1">
+                        <div>
+                          <span className="fw-bold">{item.quantity}x</span> {item.Product?.productName || 'Produto não encontrado'}
+                        </div>
+                        <div className="text-muted">
+                          R$ {item.price.toFixed(2)} (unid.)
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <li>Nenhum item encontrado para este pedido.</li>
+                  )}
+                </ul>
 
                 <div className="d-flex justify-content-between align-items-center mt-4">
                   <Form.Select
@@ -184,10 +199,6 @@ return (
                     <option value="entregue">Entregue</option>
                     <option value="cancelado">Cancelado</option>
                   </Form.Select>
-
-                  <Button variant="outline-secondary" size="sm" href={`/admin/orders/${order.id}`}>
-                    Detalhes Completos
-                  </Button>
                 </div>
               </Card.Body>
             </Card>
