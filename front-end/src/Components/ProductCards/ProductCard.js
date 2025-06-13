@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./ProductCard.css";
 
-function ProductCard({ image, product_name, product_value, addToCart }) {
+function ProductCard({ image, product_name, product_value, product_quantity, addToCart }) {
   const [quantity, setQuantity] = useState(1);
 
   const handleIncrement = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+    if (quantity <= product_quantity-1) {
+      setQuantity((prevQuantity) => prevQuantity + 1);
+    }
   };
 
   const handleDecrement = () => {
