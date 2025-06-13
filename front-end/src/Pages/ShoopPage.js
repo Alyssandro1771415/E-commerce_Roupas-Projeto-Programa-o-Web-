@@ -32,11 +32,16 @@ function ShopPage() {
         }
 
         const data = await response.json();
-        const productsData = data.productsWithImages.map(datas => ({
-          product_name: datas.productName,
-          product_value: datas.value,
-          image: datas.imageUrl
-        }));
+        const productsData = Array.isArray(data.productsWithImages)
+          ? data.productsWithImages
+              .filter(prod => Number(prod.quantity) > 0)
+              .map(datas => ({
+                product_name: datas.productName,
+                product_value: datas.value,
+                quantity: datas.quantity,
+                image: datas.imageUrl
+              }))
+          : [];
 
         setData(productsData);
         setLoading(false);
@@ -105,6 +110,7 @@ function ShopPage() {
               image={item.image}
               product_name={item.product_name}
               product_value={item.product_value}
+              product_quantity={item.quantity}
               addToCart={addToCart}
             />
           ))}
