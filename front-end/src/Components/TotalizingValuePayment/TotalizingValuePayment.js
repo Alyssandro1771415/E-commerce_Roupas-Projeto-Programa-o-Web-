@@ -71,21 +71,24 @@ function TotalizingValuePayment({ data, onQuantityChange, onRemoveItem }) {
       return;
     }
 
-    const items = data.map(product => ({
-      id: product.id,
-      title: product.product_name,
-      quantity: product.quantity,
-      unit_price: Number(product.product_value)
-    }));
+    
+    const body = {
+      items: data.map(product => ({
+        id: product.id,
+        title: product.product_name,
+        quantity: product.quantity,
+        unit_price: Number(product.product_value)
+      })),
+    };
 
     try {
       const response = await fetch("http://localhost:5000/api/payment/create_preference", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "authorization-token": token
+          "authorization-token": token 
         },
-        body: JSON.stringify({ items })
+        body: JSON.stringify(body)
       });
 
       if (!response.ok) {
@@ -96,12 +99,13 @@ function TotalizingValuePayment({ data, onQuantityChange, onRemoveItem }) {
       const result = await response.json();
 
       if (result.email) {
+        // Limpa o carrinho do localStorage após o sucesso
         localStorage.removeItem(`priscylaStoreCartproducts_${result.email}`);
       }
       
       const paymentUrl = result.init_point || result.sandbox_init_point;
       if (paymentUrl) {
-        window.open(paymentUrl, "_blank");
+         window.open(paymentUrl, "_blank");
       } else {
         alert("Erro: Link de pagamento não recebido");
       }
