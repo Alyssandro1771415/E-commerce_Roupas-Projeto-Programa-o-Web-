@@ -99,7 +99,6 @@ function TotalizingValuePayment({ data, onQuantityChange, onRemoveItem }) {
       const result = await response.json();
 
       if (result.email) {
-        // Limpa o carrinho do localStorage após o sucesso
         localStorage.removeItem(`priscylaStoreCartproducts_${result.email}`);
       }
       

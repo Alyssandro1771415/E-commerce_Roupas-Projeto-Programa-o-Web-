@@ -112,6 +112,9 @@ function ShopPage() {
               product_value={item.product_value}
               product_quantity={item.quantity}
               addToCart={addToCart}
+              currentQuantityInCart={
+                products.find(p => p.product_name === item.product_name)?.quantity || 0
+              }
             />
           ))}
         </div>
