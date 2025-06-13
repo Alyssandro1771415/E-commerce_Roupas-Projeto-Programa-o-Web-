@@ -144,63 +144,62 @@ return (
     </div>
 
     {filteredOrders.length === 0 ? (
-      <div className="col-12 text-center py-5">
-        <h4>Nenhum pedido encontrado</h4>
-      </div>
-    ) : (
-      <div className="row g-4">
-        {filteredOrders.map((order) => (
-          <div key={order.id} className="col-12"> {/* CORREÇÃO: usar order.id */}
-            <Card className="shadow-sm" style={{ borderLeft: `5px solid ${getStatusColor(order.status)}` }}>
-              <Card.Body>
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <h5>Pedido #{order.id}</h5> {/* CORREÇÃO: usar order.id */}
-                    <div className="text-muted">Cliente: {order.User?.name || 'N/A'}</div> {/* CORREÇÃO: A inclusão do model User vem com U maiúsculo */}
-                    <small className="text-muted">Data: {formatDate(order.createdAt)}</small>
-                  </div>
-                  <div className="text-end">
-                    <div>{getStatusBadge(order.status)}</div>
-                    <h5 className="mt-2">R$ {order.total.toFixed(2)}</h5>
-                  </div>
-                </div>
+  <div className="col-12 text-center py-5">
+    <h4>Nenhum pedido encontrado</h4>
+  </div>
+) : (
+  <div className="row">
+    {filteredOrders.map((order) => (
+      <div key={order.id} className="col-lg-4 col-md-6 col-12 mb-4">
+        <Card className="h-100 shadow-sm" style={{ borderLeft: `5px solid ${getStatusColor(order.status)}` }}>
+          <Card.Body className="d-flex flex-column">
+            <div className="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h5>Pedido #{order.id}</h5>
+                <div className="text-muted">Cliente: {order.User?.name || 'N/A'}</div>
+                <small className="text-muted">Data: {formatDate(order.createdAt)}</small>
+              </div>
+              <div className="text-end">
+                <div>{getStatusBadge(order.status)}</div>
+                <h5 className="mt-2">R$ {order.total.toFixed(2)}</h5>
+              </div>
+            </div>
 
-                <hr />
+            <hr />
 
-                <h6 className="mb-3">Itens do Pedido:</h6>
+            <h6 className="mb-3">Itens do Pedido:</h6>
+            <ul className="list-unstyled">
+              {order.items && order.items.length > 0 ? (
+                order.items.map(item => (
+                  <li key={item.id} className="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                      <span className="fw-bold">{item.quantity}x</span> {item.Product?.productName || 'Produto não encontrado'}
+                    </div>
+                    <div className="text-muted">
+                      R$ {item.price.toFixed(2)} (unid.)
+                    </div>
+                  </li>
+                ))
+              ) : (
+                <li>Nenhum item encontrado para este pedido.</li>
+              )}
+            </ul>
+            
+            <div className="mt-auto"> 
+              <Form.Select
+                value={order.status}
+                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                size="sm"
+              >
+                <option value="pendente">Pendente</option>
+                <option value="processando">Processando</option>
+                <option value="enviado">Enviado</option>
+                <option value="entregue">Entregue</option>
+                <option value="cancelado">Cancelado</option>
+              </Form.Select>
+            </div>
 
-                <ul className="list-unstyled">
-                  {order.items && order.items.length > 0 ? (
-                    order.items.map(item => (
-                      <li key={item.id} className="d-flex justify-content-between align-items-center mb-1">
-                        <div>
-                          <span className="fw-bold">{item.quantity}x</span> {item.Product?.productName || 'Produto não encontrado'}
-                        </div>
-                        <div className="text-muted">
-                          R$ {item.price.toFixed(2)} (unid.)
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <li>Nenhum item encontrado para este pedido.</li>
-                  )}
-                </ul>
-
-                <div className="d-flex justify-content-between align-items-center mt-4">
-                  <Form.Select
-                    value={order.status}
-                    onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                    size="sm"
-                    style={{ width: '200px' }}
-                  >
-                    <option value="pendente">Pendente</option>
-                    <option value="processando">Processando</option>
-                    <option value="enviado">Enviado</option>
-                    <option value="entregue">Entregue</option>
-                    <option value="cancelado">Cancelado</option>
-                  </Form.Select>
-                </div>
-              </Card.Body>
+          </Card.Body>
             </Card>
           </div>
         ))}
