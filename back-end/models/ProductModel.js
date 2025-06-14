@@ -2,6 +2,11 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const ProductSchema = sequelize.define('Product', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   productName: {
     type: DataTypes.STRING,
     allowNull: false

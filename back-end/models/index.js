@@ -1,22 +1,19 @@
+// models/index.js
 const sequelize = require('../db');
 
 const User = require('./UserModel');
 const Product = require('./ProductModel');
 const { Order, OrderItem } = require('./OrderModel');
 
+// Associações
+Order.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+User.hasMany(Order, { foreignKey: 'user_id', as: 'orders' });
 
-// Relação: Um Pedido (Order) pertence a um Usuário (User)
-Order.belongsTo(User, { foreignKey: 'userId', allowNull: false });
-User.hasMany(Order, { foreignKey: 'userId' });
+Order.hasMany(OrderItem, { as: 'items', foreignKey: 'order_id' });
+OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
 
-// Relação: Um Pedido (Order) tem muitos Itens de Pedido (OrderItem)
-Order.hasMany(OrderItem, { as: 'items', foreignKey: 'orderId', allowNull: false });
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
-
-// Relação: Um Item de Pedido (OrderItem) está ligado a um Produto (Product)
-OrderItem.belongsTo(Product, { foreignKey: 'productId', allowNull: false });
-Product.hasMany(OrderItem, { as: 'orderItems', foreignKey: 'productId' });
-
+OrderItem.belongsTo(Product, { foreignKey: 'product_id' });
+Product.hasMany(OrderItem, { as: 'orderItems', foreignKey: 'product_id' });
 
 module.exports = {
   sequelize,
