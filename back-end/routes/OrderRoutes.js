@@ -78,7 +78,7 @@ router.put('/:id/status', adminAuth, async (req, res) => {
     const { status } = req.body;
     const { id } = req.params;
     const validStatuses = ['PENDING','PAID','SHIPPED','DELIVERED','CANCELED'];
-    
+
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ success: false, error: 'Status inválido' });
     }
@@ -89,7 +89,7 @@ router.put('/:id/status', adminAuth, async (req, res) => {
       return res.status(404).json({ success: false, error: 'Pedido não encontrado' });
     }
 
-    order.status = status;
+    order.order_status = status;
     await order.save();
 
     res.json({ success: true, message: 'Status atualizado com sucesso', data: order });

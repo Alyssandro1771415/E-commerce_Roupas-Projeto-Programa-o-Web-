@@ -136,7 +136,7 @@ return (
       >
         <option value="all">Todos os status</option>
         <option value="PENDING">Pendente</option>
-        <option value="PAGO">Pago</option>
+        <option value="PAID">Pago</option>
         <option value="SHIPPED">Enviado</option>
         <option value="DELIVERED">Entregue</option>
         <option value="CANCELED">Cancelado</option>
@@ -158,7 +158,7 @@ return (
             <div className="d-flex justify-content-between align-items-start mb-3">
               <div>
                 <h5>Pedido #{order.id}</h5>
-                <div className="text-muted">Cliente: {order.user.name || 'N/A'}</div>
+                <div className="text-muted">Cliente: {order.user?.name || 'N/A'}</div>
                 <small className="text-muted">Data: {formatDate(order.order_date)}</small>
               </div>
               <div className="text-end">
