@@ -10,6 +10,7 @@ import AdministrationPage from './Pages/AdministrationPage';
 import PaymentPage from './Pages/PaymentPage';
 import ProtectedAdminRoute from './Components/ProtectedAdminRoute/ProtectAdminRoute.js';
 import AdminOrdersPage from './Pages/OrdersPage.js';
+import UserOrdersPage from './Pages/UserOrdersPage';
 
 
 import { AuthProvider } from './Components/AuthContext.js';
@@ -20,6 +21,7 @@ const Shoop = () => <ShoopPage></ShoopPage>;
 const AdministerPage = () => <AdministrationPage></AdministrationPage>;
 const Payment = () => <PaymentPage></PaymentPage>
 const Orders = () => <AdminOrdersPage></AdminOrdersPage>
+const UserOrders = () => <UserOrdersPage></UserOrdersPage>
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/shoop" element={<Shoop />} />
+              <Route path="/my-orders" element={<UserOrders />} />
               <Route path="/AdministerPage" element={
                 <ProtectedAdminRoute>
                   <AdministerPage />

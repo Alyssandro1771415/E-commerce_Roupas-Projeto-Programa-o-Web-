@@ -1,5 +1,5 @@
-import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
-import { config } from 'dotenv';
+const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
+const { config } = require('dotenv');
 
 config();
 
@@ -21,4 +21,4 @@ const getPaymentStatus = async (paymentId) => {
   }
 };
 
-export { preference, payment, getPaymentStatus };
+module.exports = { preference, payment, getPaymentStatus };

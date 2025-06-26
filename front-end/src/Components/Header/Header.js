@@ -35,6 +35,7 @@ function Header() {
               <>
                 <li><Link to="/" className="menu-item">HOME</Link></li>
                 <li><Link to="/shoop" className="menu-item">COMPRE</Link></li>
+                <li><Link to="/my-orders" className="menu-item">MEUS PEDIDOS</Link></li>
                 {/* O link de pedidos para usuário comum foi removido por enquanto */}
                 {/* <li><Link to="/orders" className="menu-item">PEDIDOS</Link></li> */}
                 
