@@ -82,6 +82,35 @@ class ProductController {
             return res.status(500).json({ message: "Erro ao buscar os dados de produtos!" });
         }
     }
+    async updateStock(req, res) {
+        try {
+            const { id } = req.params;
+            const { quantity } = req.body; 
+
+            if (quantity === undefined || isNaN(quantity) || quantity < 0) {
+                return res.status(400).json({ message: "Quantidade inválida fornecida." });
+            }
+
+            const product = await Product.findByPk(id);
+
+            if (!product) {
+                return res.status(404).json({ message: "Produto não encontrado." });
+            }
+
+            
+            product.quantity = quantity;
+            await product.save();
+
+            return res.status(200).json({ 
+                message: "Estoque atualizado com sucesso!",
+                product 
+            });
+
+        } catch (error) {
+            console.error("Erro ao atualizar estoque:", error);
+            return res.status(500).json({ message: "Erro interno no servidor" });
+        }
+    }
 }
 
 module.exports = new ProductController();
