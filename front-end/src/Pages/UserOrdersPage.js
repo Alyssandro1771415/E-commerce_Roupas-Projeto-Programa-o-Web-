@@ -10,42 +10,41 @@ function UserOrdersPage() {
 
   useEffect(() => {
     const fetchUserOrders = async () => {
-  try {
-    setLoading(true);
-    const token = localStorage.getItem('authorization-token');
-    
-    if (!token) {
-      throw new Error('Você precisa estar logado para ver seus pedidos');
-    }
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('token'); // Alterado para 'token'
+        
+        if (!token) {
+          throw new Error('Você precisa estar logado para ver seus pedidos');
+        }
 
-    const response = await fetch("http://localhost:5000/api/user/orders", {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        const response = await fetch("http://localhost:5000/api/user/orders", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Formato Bearer mantido
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('Sessão expirada. Faça login novamente.');
+          }
+          throw new Error('Erro ao carregar seus pedidos');
+        }
+
+        const data = await response.json();
+        setOrders(data.orders);
+      } catch (err) {
+        setError(err.message);
+        if (err.message.includes('Sessão expirada')) {
+          localStorage.removeItem('token'); // Alterado para 'token'
+          // window.location.href = '/login'; // Descomente se quiser redirecionar
+        }
+      } finally {
+        setLoading(false);
       }
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error('Sessão expirada. Faça login novamente.');
-      }
-      throw new Error('Erro ao carregar seus pedidos');
-    }
-
-    const data = await response.json();
-    setOrders(data.orders);
-  } catch (err) {
-    setError(err.message);
-    // Opcional: redirecionar para login se for erro 401
-    if (err.message.includes('Sessão expirada')) {
-      localStorage.removeItem('authorization-token');
-      // window.location.href = '/login'; // Descomente se quiser redirecionar
-    }
-  } finally {
-    setLoading(false);
-  }
-};
+    };
 
     fetchUserOrders();
   }, []);
