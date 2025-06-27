@@ -41,6 +41,6 @@ server.use("/api/user", UserRoutes);
 server.use("/api/product", ProductRoutes);
 server.use("/api/payment", PaymentRoutes);
 server.use('/api/admin/orders', OrderRoutes);
-server.use('/api/user/orders', UserOrderRoutes);
+server.use('/api/orders', UserOrderRoutes);
 
 server.use('/api/webhook', WebhookController);

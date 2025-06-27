@@ -6,46 +6,29 @@ function UserOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     const fetchUserOrders = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem('authorization-token');
-        
-        if (!token) {
-          throw new Error('Você precisa estar logado para ver seus pedidos');
-        }
-
-        const response = await fetch("http://localhost:5000/api/user/orders", {
+        const response = await fetch("http://localhost:5000/api/orders/me", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${localStorage.getItem('authorization-token')}`
           }
         });
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            throw new Error('Sessão expirada. Faça login novamente.');
-          }
-          throw new Error('Erro ao carregar seus pedidos');
-        }
+        if (!response.ok) throw new Error('Erro ao carregar seus pedidos');
 
         const data = await response.json();
-          setOrders(data.orders);
-        } catch (err) {
-          setError(err.message);
-          // Opcional: redirecionar para login se for erro 401
-          if (err.message.includes('Sessão expirada')) {
-            localStorage.removeItem('authorization-token');
-            // window.location.href = '/login'; // Descomente se quiser redirecionar
-          }
-        } finally {
-          setLoading(false);
-        }
-      };
+        setOrders(data.orders);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchUserOrders();
   }, []);
@@ -62,14 +45,7 @@ function UserOrdersPage() {
   };
 
   const formatDate = (dateString) => {
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    return new Date(dateString).toLocaleDateString('pt-BR', options);
-  };
-
-  const calculateTotal = (items) => {
-    return items.reduce((total, item) => {
-      return total + (item.quantity * item.Product.value);
-    }, 0).toFixed(2);
+    return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
   if (loading) {
@@ -85,74 +61,47 @@ function UserOrdersPage() {
   if (error) {
     return (
       <div className="container py-5 text-center">
-        <Alert variant="danger">
-          {error}
-        </Alert>
+        <Alert variant="danger">{error}</Alert>
       </div>
     );
   }
 
   return (
     <div className="container mt-5 py-5">
-      <br></br>
-      <br></br>
-      <br></br>
       <h1 className="mb-4">Meus Pedidos</h1>
-      
       {orders.length === 0 ? (
-        <div className="col-12 text-center py-5">
-          <h4>Você ainda não realizou nenhum pedido</h4>
+        <div className="text-center py-5">
+          <h4>Você ainda não fez nenhum pedido.</h4>
         </div>
       ) : (
         <div className="row">
-          {orders.map((order) => (
-            <div key={order.id} className="col-lg-6 col-md-8 col-12 mb-4 mx-auto">
-              <Card 
-                className="h-100 shadow-sm" 
-                style={{ 
-                  borderLeft: `5px solid ${getStatusColor(order.order_status)}`,
-                  cursor: 'pointer'
-                }}
-                onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
-              >
-                <Card.Body>
+          {orders.map(order => (
+            <div key={order.id} className="col-lg-4 col-md-6 col-12 mb-4">
+              <Card className="h-100 shadow-sm" style={{ borderLeft: `5px solid ${getStatusColor(order.order_status)}` }}>
+                <Card.Body className="d-flex flex-column">
                   <div className="d-flex justify-content-between align-items-start mb-3">
                     <div>
                       <h5>Pedido #{order.id}</h5>
                       <small className="text-muted">Data: {formatDate(order.order_date)}</small>
                     </div>
-                    <div className="text-end">
-                      <div>{getStatusBadge(order.order_status)}</div>
-                      <div className="fw-bold mt-1">R$ {calculateTotal(order.items)}</div>
-                    </div>
+                    <div>{getStatusBadge(order.order_status)}</div>
                   </div>
-
-                  {selectedOrder?.id === order.id && (
-                    <>
-                      <hr />
-                      <h6 className="mb-3">Itens do Pedido:</h6>
-                      <ul className="list-unstyled">
-                        {order.items && order.items.length > 0 ? (
-                          order.items.map(item => (
-                            <li key={item.id} className="d-flex justify-content-between align-items-center mb-2">
-                              <div>
-                                <span className="fw-bold">{item.quantity}x</span> {item.Product?.productName || 'Produto não encontrado'}
-                              </div>
-                              <div className="text-muted">
-                                R$ {(item.Product?.value * item.quantity).toFixed(2)}
-                              </div>
-                            </li>
-                          ))
-                        ) : (
-                          <li>Nenhum item encontrado para este pedido.</li>
-                        )}
-                      </ul>
-                      <div className="d-flex justify-content-between mt-3 fw-bold">
-                        <span>Total:</span>
-                        <span>R$ {calculateTotal(order.items)}</span>
-                      </div>
-                    </>
-                  )}
+                  <hr />
+                  <h6 className="mb-3">Itens do Pedido:</h6>
+                  <ul className="list-unstyled">
+                    {order.items && order.items.length > 0 ? (
+                      order.items.map(item => (
+                        <li key={item.id} className="d-flex justify-content-between align-items-center mb-1">
+                          <div>
+                            <span className="fw-bold">{item.quantity}x</span> {item.Product?.productName || 'Produto'}
+                          </div>
+                          <div className="text-muted">R$ {item.Product?.value}</div>
+                        </li>
+                      ))
+                    ) : (
+                      <li>Nenhum item neste pedido.</li>
+                    )}
+                  </ul>
                 </Card.Body>
               </Card>
             </div>
