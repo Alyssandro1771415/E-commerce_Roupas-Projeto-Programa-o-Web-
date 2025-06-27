@@ -80,7 +80,7 @@ class UserController {
                 { expiresIn: '1d' }
             );
 
-            res.header("Authorization", `Bearer ${token}`);
+            res.header("authorization-token", token);
 
             return res.status(200).json({ message: "Login realizado com sucesso!", token, user });
 

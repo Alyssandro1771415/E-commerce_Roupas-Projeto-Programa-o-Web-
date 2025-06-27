@@ -12,7 +12,7 @@ function UserOrdersPage() {
     const fetchUserOrders = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem('token'); // Alterado para 'token'
+        const token = localStorage.getItem('authorization-token');
         
         if (!token) {
           throw new Error('Você precisa estar logado para ver seus pedidos');
@@ -22,7 +22,7 @@ function UserOrdersPage() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Formato Bearer mantido
+            'Authorization': `Bearer ${token}`
           }
         });
 
@@ -34,17 +34,18 @@ function UserOrdersPage() {
         }
 
         const data = await response.json();
-        setOrders(data.orders);
-      } catch (err) {
-        setError(err.message);
-        if (err.message.includes('Sessão expirada')) {
-          localStorage.removeItem('token'); // Alterado para 'token'
-          // window.location.href = '/login'; // Descomente se quiser redirecionar
+          setOrders(data.orders);
+        } catch (err) {
+          setError(err.message);
+          // Opcional: redirecionar para login se for erro 401
+          if (err.message.includes('Sessão expirada')) {
+            localStorage.removeItem('authorization-token');
+            // window.location.href = '/login'; // Descomente se quiser redirecionar
+          }
+        } finally {
+          setLoading(false);
         }
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
     fetchUserOrders();
   }, []);
